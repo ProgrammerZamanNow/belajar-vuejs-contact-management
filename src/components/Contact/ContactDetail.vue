@@ -38,7 +38,7 @@ onMounted(async () => {
 <template>
   <div class="flex items-center mb-6">
     <RouterLink to="/dashboard/contacts"
-       class="text-blue-400 hover:text-blue-300 mr-4 flex items-center transition-colors duration-200">
+                class="text-blue-400 hover:text-blue-300 mr-4 flex items-center transition-colors duration-200">
       <i class="fas fa-arrow-left mr-2"></i> Back to Contacts
     </RouterLink>
     <h1 class="text-2xl font-bold text-white flex items-center">
@@ -54,7 +54,7 @@ onMounted(async () => {
         <div class="w-20 h-20 bg-gradient rounded-full mx-auto flex items-center justify-center mb-4 shadow-lg">
           <i class="fas fa-user text-3xl text-white"></i>
         </div>
-        <h2 class="text-2xl font-bold text-white mb-2">{{contact.first_name}} {{ contact.last_name}}</h2>
+        <h2 class="text-2xl font-bold text-white mb-2">{{ contact.first_name }} {{ contact.last_name }}</h2>
         <div class="w-24 h-1 bg-gradient mx-auto rounded-full"></div>
       </div>
 
@@ -85,7 +85,7 @@ onMounted(async () => {
             <i class="fas fa-envelope text-blue-400 mr-2"></i>
             <h3 class="text-gray-300 text-sm font-medium">Email</h3>
           </div>
-          <p class="text-white text-lg ml-6">{{ contact.email}}</p>
+          <p class="text-white text-lg ml-6">{{ contact.email }}</p>
         </div>
 
         <div
@@ -94,7 +94,7 @@ onMounted(async () => {
             <i class="fas fa-phone text-blue-400 mr-2"></i>
             <h3 class="text-gray-300 text-sm font-medium">Phone</h3>
           </div>
-          <p class="text-white text-lg ml-6">{{ contact.phone}}</p>
+          <p class="text-white text-lg ml-6">{{ contact.phone }}</p>
         </div>
       </div>
 
@@ -108,7 +108,7 @@ onMounted(async () => {
           <!-- Add Address Card -->
           <div
               class="bg-gray-700 bg-opacity-50 p-5 rounded-lg border-2 border-dashed border-gray-600 shadow-md card-hover">
-            <a href="add_address.html" class="block h-full">
+            <RouterLink :to="`/dashboard/contacts/${id}/addresses/create`" class="block h-full">
               <div class="flex flex-col items-center justify-center h-full text-center py-4">
                 <div
                     class="w-16 h-16 bg-gradient rounded-full flex items-center justify-center mb-4 shadow-lg transform transition-transform duration-300 hover:scale-110">
@@ -116,7 +116,7 @@ onMounted(async () => {
                 </div>
                 <h4 class="text-lg font-semibold text-white">Add Address</h4>
               </div>
-            </a>
+            </RouterLink>
           </div>
 
           <!-- Address Card 1 -->
