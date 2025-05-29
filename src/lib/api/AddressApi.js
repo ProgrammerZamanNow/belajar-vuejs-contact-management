@@ -53,3 +53,13 @@ export const addressUpdate = async (token, id, addressId, {street, city, provinc
     })
   })
 }
+
+export const addressDelete = async (token, id, addressId) => {
+  return fetch(`${import.meta.env.VITE_API_PATH}/contacts/${id}/addresses/${addressId}`, {
+    method: 'DELETE',
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': token
+    }
+  })
+}
