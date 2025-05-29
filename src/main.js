@@ -12,6 +12,7 @@ import ContactCreate from "./components/Contact/ContactCreate.vue";
 import ContactEdit from "./components/Contact/ContactEdit.vue";
 import ContactDetail from "./components/Contact/ContactDetail.vue";
 import AddressCreate from "./components/Address/AddressCreate.vue";
+import AddressEdit from "./components/Address/AddressEdit.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -52,6 +53,10 @@ const router = createRouter({
         {
           path: "contacts/:id/addresses/create",
           component: AddressCreate
+        },
+        {
+          path: "contacts/:id/addresses/:addressId/edit",
+          component: AddressEdit
         },
         {
           path: "users/profile",
