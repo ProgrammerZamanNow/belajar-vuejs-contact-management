@@ -15,3 +15,13 @@ export const addressCreate = async (token, id, {street, city, province, country,
     })
   })
 }
+
+export const addressList = async (token, id) => {
+  return fetch(`${import.meta.env.VITE_API_PATH}/contacts/${id}/addresses`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': token
+    }
+  })
+}

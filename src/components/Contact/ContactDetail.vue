@@ -1,9 +1,10 @@
 <script setup>
 import {useRoute} from "vue-router";
 import {useLocalStorage} from "@vueuse/core";
-import {onMounted, reactive} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {contactDetail} from "../../lib/api/ContactApi.js";
 import {alertError} from "../../lib/alert.js";
+import {addressList} from "../../lib/api/AddressApi.js";
 
 const route = useRoute();
 const {id} = route.params;
@@ -14,6 +15,19 @@ const contact = reactive({
   email: "",
   phone: ""
 })
+const addresses = ref([])
+
+async function fetchAddresses() {
+  const response = await addressList(token.value, id);
+  const responseBody = await response.json();
+  console.log(responseBody);
+
+  if (response.status === 200) {
+    addresses.value = responseBody.data
+  } else {
+    await alertError(responseBody.errors)
+  }
+}
 
 async function fetchContact() {
   const response = await contactDetail(token.value, id);
@@ -32,6 +46,7 @@ async function fetchContact() {
 
 onMounted(async () => {
   await fetchContact();
+  await fetchAddresses();
 })
 </script>
 
@@ -119,46 +134,46 @@ onMounted(async () => {
             </RouterLink>
           </div>
 
-          <!-- Address Card 1 -->
-          <div class="bg-gray-700 bg-opacity-50 p-5 rounded-lg shadow-md border border-gray-600 card-hover">
+          <div v-for="address in addresses" :key="address.id"
+               class="bg-gray-700 bg-opacity-50 p-5 rounded-lg shadow-md border border-gray-600 card-hover">
             <div class="flex items-center mb-3">
               <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3 shadow-md">
                 <i class="fas fa-home text-white"></i>
               </div>
-              <h4 class="text-lg font-semibold text-white">Home Address</h4>
+              <h4 class="text-lg font-semibold text-white">Address</h4>
             </div>
             <div class="space-y-3 text-gray-300 ml-2 mb-4">
               <p class="flex items-center">
                 <i class="fas fa-road text-gray-500 w-6"></i>
                 <span class="font-medium w-24">Street:</span>
-                <span>123 Main St</span>
+                <span>{{ address.street }}</span>
               </p>
               <p class="flex items-center">
                 <i class="fas fa-city text-gray-500 w-6"></i>
                 <span class="font-medium w-24">City:</span>
-                <span>New York</span>
+                <span>{{ address.city }}</span>
               </p>
               <p class="flex items-center">
                 <i class="fas fa-map text-gray-500 w-6"></i>
                 <span class="font-medium w-24">Province:</span>
-                <span>NY</span>
+                <span>{{ address.province }}</span>
               </p>
               <p class="flex items-center">
                 <i class="fas fa-flag text-gray-500 w-6"></i>
                 <span class="font-medium w-24">Country:</span>
-                <span>USA</span>
+                <span>{{ address.country }}</span>
               </p>
               <p class="flex items-center">
                 <i class="fas fa-mailbox text-gray-500 w-6"></i>
                 <span class="font-medium w-24">Postal Code:</span>
-                <span>10001</span>
+                <span>{{ address.postal_code }}</span>
               </p>
             </div>
             <div class="flex justify-end space-x-3">
-              <a href="edit_address.html"
-                 class="px-4 py-2 bg-gradient text-white rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-md flex items-center">
+              <RouterLink :to="`/dashboard/contacts/${id}/addresses/${address.id}/edit`"
+                          class="px-4 py-2 bg-gradient text-white rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-md flex items-center">
                 <i class="fas fa-edit mr-2"></i> Edit
-              </a>
+              </RouterLink>
               <button
                   class="px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-md flex items-center">
                 <i class="fas fa-trash-alt mr-2"></i> Delete
@@ -166,52 +181,6 @@ onMounted(async () => {
             </div>
           </div>
 
-          <!-- Address Card 2 -->
-          <div class="bg-gray-700 bg-opacity-50 p-5 rounded-lg shadow-md border border-gray-600 card-hover">
-            <div class="flex items-center mb-3">
-              <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center mr-3 shadow-md">
-                <i class="fas fa-building text-white"></i>
-              </div>
-              <h4 class="text-lg font-semibold text-white">Work Address</h4>
-            </div>
-            <div class="space-y-3 text-gray-300 ml-2 mb-4">
-              <p class="flex items-center">
-                <i class="fas fa-road text-gray-500 w-6"></i>
-                <span class="font-medium w-24">Street:</span>
-                <span>456 Oak Ave</span>
-              </p>
-              <p class="flex items-center">
-                <i class="fas fa-city text-gray-500 w-6"></i>
-                <span class="font-medium w-24">City:</span>
-                <span>San Francisco</span>
-              </p>
-              <p class="flex items-center">
-                <i class="fas fa-map text-gray-500 w-6"></i>
-                <span class="font-medium w-24">Province:</span>
-                <span>CA</span>
-              </p>
-              <p class="flex items-center">
-                <i class="fas fa-flag text-gray-500 w-6"></i>
-                <span class="font-medium w-24">Country:</span>
-                <span>USA</span>
-              </p>
-              <p class="flex items-center">
-                <i class="fas fa-mailbox text-gray-500 w-6"></i>
-                <span class="font-medium w-24">Postal Code:</span>
-                <span>94102</span>
-              </p>
-            </div>
-            <div class="flex justify-end space-x-3">
-              <a href="edit_address.html"
-                 class="px-4 py-2 bg-gradient text-white rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-md flex items-center">
-                <i class="fas fa-edit mr-2"></i> Edit
-              </a>
-              <button
-                  class="px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-md flex items-center">
-                <i class="fas fa-trash-alt mr-2"></i> Delete
-              </button>
-            </div>
-          </div>
         </div>
       </div>
 
